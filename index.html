@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>哑巴的主页</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #F0EFED;
+  --ink: #1a1a1a;
+  --ink-soft: rgba(0,0,0,0.55);
+  --card: #ffffff;
+  --line: rgba(0,0,0,0.08);
+  --blue-pill: #DBECFC;
+  --serif: 'Instrument Serif', 'Songti SC', 'STSong', 'SimSun', serif;
+  --sans: 'Instrument Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.bg-video {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: -10;
+  background: linear-gradient(180deg, #b8d4ee 0%, #e8e6dd 62%, #9dbf8d 100%);
+}
+
+.font-serif-display { font-family: var(--serif); font-weight: 400; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { opacity: 0; animation: fadeUp 0.8s var(--ease) forwards; }
+
+.page { min-height: 100vh; padding: 16px; }
+@media (min-width: 640px) { .page { padding: 24px; } }
+@media (min-width: 1024px) { .page { padding: 32px; } }
+.wrap { max-width: 1400px; margin: 0 auto; }
+
+.header-pill {
+  background: #fff;
+  border-radius: 999px;
+  padding: 10px 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+}
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.brand-dots {
+  width: 26px; height: 26px; background: #000; border-radius: 7px;
+  display: grid; grid-template-columns: 1fr 1fr; place-content: center; gap: 3px;
+}
+.brand-dots span { width: 4px; height: 4px; background: #fff; border-radius: 2px; }
+.brand-name { font-size: 26px; }
+.main-nav { display: none; gap: 32px; }
+@media (min-width: 1024px) { .main-nav { display: flex; } }
+.main-nav a {
+  font-size: 14px; color: rgba(0,0,0,0.45); text-decoration: none;
+  transition: color 0.2s;
+}
+.main-nav a:hover { color: #000; }
+.main-nav a.active { color: #000; font-weight: 500; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.level-chip {
+  font-size: 12px; padding: 6px 14px; border-radius: 999px;
+  background: #000; color: #fff;
+}
+
+.section-row {
+  border-bottom: 1px solid var(--line);
+  padding: 28px 4px 24px;
+  margin-bottom: 28px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px;
+}
+.greeting { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 240px; }
+.avatar {
+  width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(to bottom right, #f87171, #f97316);
+  display: flex; align-items: center; justify-content: center;
+}
+.avatar svg { width: 24px; height: 24px; color: #fff; }
+.greeting h1 { font-size: 34px; }
+@media (min-width: 640px) { .greeting h1 { font-size: 42px; } }
+.section-row .panel-title {
+  font-size: 22px; letter-spacing: -0.02em; flex: 1; text-align: center; min-width: 160px;
+}
+.section-row .date-label { flex: 1; text-align: right; color: var(--ink-soft); font-size: 14px; min-width: 160px; }
+
+.main-grid { display: flex; flex-direction: column; gap: 24px; }
+@media (min-width: 1024px) {
+  .main-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 28px; }
+  .col-left { grid-column: span 3; }
+  .col-center { grid-column: span 6; }
+  .col-right { grid-column: span 3; }
+}
+.col-left, .col-center, .col-right { display: flex; flex-direction: column; gap: 24px; }
+
+.game-pill {
+  background: var(--blue-pill);
+  border-radius: 999px;
+  padding: 10px 18px;
+  display: flex; align-items: center; gap: 12px;
+}
+.game-pill .x-circle {
+  width: 36px; height: 36px; background: #fff; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.game-pill .x-circle svg { width: 16px; height: 16px; }
+.game-pill .gp-title { font-weight: 600; font-size: 15px; }
+.game-pill .gp-sub { font-size: 12px; color: rgba(0,0,0,0.5); }
+
+.big-date { padding: 4px 8px; }
+.big-date .num { font-size: 88px; letter-spacing: -0.04em; line-height: 0.95; font-weight: 600; }
+@media (min-width: 1024px) { .big-date .num { font-size: 110px; } }
+.big-date .label { color: var(--ink-soft); margin-top: 8px; font-size: 14px; }
+
+.quote-card {
+  border-radius: 24px;
+  background: linear-gradient(160deg, #fbbf24 0%, #f59e0b 55%, #ea580c 100%);
+  padding: 24px; color: #fff;
+  position: relative; overflow: hidden;
+}
+.quote-card .qc-badge {
+  display: inline-block; font-size: 11px; padding: 4px 12px; border-radius: 999px;
+  background: rgba(255,255,255,0.25); margin-bottom: 14px; font-weight: 500;
+}
+.quote-card .qc-text { font-family: var(--serif); font-size: 20px; line-height: 1.5; }
+
+.task-card {
+  background: var(--card);
+  border-radius: 24px;
+  padding: 20px 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.task-row1 { display: flex; align-items: center; justify-content: space-between; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.task-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 500; }
+.task-title svg { width: 18px; height: 18px; color: rgba(0,0,0,0.6); }
+.task-tag { font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 999px; }
+.tag-green { background: #22c55e; color: #fff; }
+.tag-yellow { background: #facc15; color: #1a1a1a; }
+.task-row2 { padding: 14px 0 4px; font-size: 15px; color: var(--ink); }
+.task-card.done .task-row2 { color: rgba(0,0,0,0.35); text-decoration: line-through; }
+.task-empty {
+  background: var(--card); border-radius: 24px; padding: 40px 24px;
+  text-align: center; color: var(--ink-soft); font-size: 14px;
+}
+
+.links-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.links-head .star-circle {
+  width: 34px; height: 34px; background: #fff; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.links-head h2 { font-size: 22px; letter-spacing: -0.02em; }
+.link-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 4px; border-top: 1px solid var(--line);
+  text-decoration: none; color: var(--ink); font-size: 15px;
+  transition: padding-left 0.2s var(--ease);
+}
+.link-item:hover { padding-left: 10px; }
+.link-item svg { width: 14px; height: 14px; color: rgba(0,0,0,0.4); flex-shrink: 0; }
+.links-group-label { font-size: 12px; color: var(--ink-soft); margin: 18px 4px 4px; letter-spacing: 0.08em; }
+
+.levels { margin-top: 56px; }
+.levels-head { margin-bottom: 24px; padding: 0 4px; }
+.levels-head h2 { font-size: 28px; }
+.levels-head p { color: var(--ink-soft); font-size: 14px; margin-top: 6px; }
+.levels-grid { display: grid; gap: 20px; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .levels-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.level-card {
+  position: relative; min-height: 300px;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  text-decoration: none; display: flex;
+}
+.level-card:hover { transform: translateY(-6px); }
+.level-card-main {
+  position: relative; flex: 1; border-radius: 24px; padding: 28px;
+  display: flex; flex-direction: column; gap: 14px;
+  overflow: hidden; color: #fff;
+  box-shadow: inset 0 -4px 15px -2px rgba(255,255,255,0.85), 0 4px 14px rgba(0,0,0,0.06);
+}
+.level-card.blue .level-card-main {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(80,150,255,0.30) 0%, transparent 40%),
+    linear-gradient(180deg, #0B0F17 0%, #0B0F17 40%, #4663BF 80%, #a1ccf7 96%, #FFFFFF 100%);
+}
+.level-card.green .level-card-main {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(50,200,110,0.30) 0%, transparent 40%),
+    linear-gradient(180deg, #0B0B12 0%, #0B0B12 40%, #38D26B 80%, #aaf8cd 96%, #FFFFFF 100%);
+}
+.level-card.orange .level-card-main {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(217,81,27,0.31) 0%, transparent 40%),
+    linear-gradient(180deg, #180D0B 0%, #180D0B 40%, #CF451E 80%, #e9d551 96%, #FFFFFF 100%);
+}
+.level-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; margin-bottom: 4px;
+}
+.level-icon svg { width: 20px; height: 20px; color: rgba(255,255,255,0.88); position: relative; z-index: 1; }
+.level-card.blue .level-icon { background: linear-gradient(145deg, rgba(20,25,45,0.9), rgba(10,12,16,0.98)); border: 1px solid rgba(80,130,255,0.22); }
+.level-card.green .level-icon { background: linear-gradient(145deg, rgba(18,35,25,0.9), rgba(10,14,12,0.98)); border: 1px solid rgba(50,200,110,0.22); }
+.level-card.orange .level-icon { background: linear-gradient(145deg, rgba(40,28,18,0.9), rgba(14,12,10,0.98)); border: 1px solid rgba(232,120,40,0.22); }
+.level-status {
+  position: absolute; top: 24px; right: 24px;
+  font-size: 11px; padding: 4px 12px; border-radius: 999px;
+  background: rgba(255,255,255,0.14); color: rgba(255,255,255,0.85);
+  backdrop-filter: blur(4px);
+}
+.level-name { font-size: 22px; font-weight: 700; }
+.level-desc { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+.level-enter {
+  margin-top: auto; font-size: 13.5px; font-weight: 700; color: #fff;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: gap 0.25s cubic-bezier(0.22,1,0.36,1);
+}
+.level-card:hover .level-enter { gap: 12px; }
+
+.footer {
+  margin-top: 64px; padding: 24px 4px 8px;
+  border-top: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
+  color: var(--ink-soft); font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<video class="bg-video" autoplay loop muted playsinline src="assets/bg.mp4"></video>
+<div class="page">
+  <div class="wrap">
+
+    <header class="header-pill animate-fade-up" style="animation-delay: 0s">
+      <a class="brand" href="#">
+        <span class="brand-dots"><span></span><span></span><span></span><span></span></span>
+        <span class="brand-name font-serif-display" id="brandName">哑巴</span>
+      </a>
+      <nav class="main-nav">
+        <a href="#" class="active">首页</a>
+        <a href="#levels">英语·词根</a>
+        <a href="#levels">程序</a>
+      </nav>
+      <div class="header-right">
+        <span class="level-chip">人生游戏 · 进行中</span>
+      </div>
+    </header>
+
+    <div class="section-row animate-fade-up" style="animation-delay: 0.1s">
+      <div class="greeting">
+        <span class="avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </span>
+        <h1 class="font-serif-display" id="greeting">Hey, 哑巴!</h1>
+      </div>
+      <div class="panel-title">我的游戏面板</div>
+      <div class="date-label" id="dateLabel"></div>
+    </div>
+
+    <div class="main-grid">
+
+      <div class="col-left">
+        <div class="game-pill animate-fade-up" style="animation-delay: 0.15s">
+          <span class="x-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#EAB308" stroke-width="3.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </span>
+          <div>
+            <div class="gp-title">人生游戏</div>
+            <div class="gp-sub">Life is a Game</div>
+          </div>
+        </div>
+
+        <div class="big-date animate-fade-up" style="animation-delay: 0.2s">
+          <div class="num" id="bigDay">--</div>
+          <div class="label" id="bigDateLabel">今天</div>
+        </div>
+
+        <div class="quote-card animate-fade-up" style="animation-delay: 0.25s">
+          <span class="qc-badge">今日格言</span>
+          <div class="qc-text" id="quoteText">载入中……</div>
+        </div>
+      </div>
+
+      <div class="col-center" id="taskColumn">
+        <div class="task-empty animate-fade-up" style="animation-delay: 0.3s">任务载入中……</div>
+      </div>
+
+      <div class="col-right">
+        <div class="links-card animate-fade-up" style="animation-delay: 0.35s">
+          <div class="links-head">
+            <span class="star-circle">⭐</span>
+            <h2>常用入口</h2>
+          </div>
+          <div class="links-group-label">常用网站</div>
+          <div id="favLinks"></div>
+          <div class="links-group-label">社交</div>
+          <div id="socialLinks"></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="levels" id="levels">
+      <div class="levels-head animate-fade-up" style="animation-delay: 0.45s">
+        <h2>选择你的关卡</h2>
+        <p>每个领域都是一场通关游戏，点进去看进度</p>
+      </div>
+      <div class="levels-grid" id="levelsGrid"></div>
+    </section>
+
+    <footer class="footer">
+      <span>© 2026 <span id="footerName">哑巴</span> · 用 Obsidian 驱动</span>
+      <span>人生游戏 v0.1</span>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const arrowSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+const playSvg = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>';
+const flagSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>';
+const bookSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+const codeSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>';
+const lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+const levelIcons = { blue: bookSvg, green: codeSvg, orange: lockSvg };
+
+(function () {
+  const now = new Date();
+  const week = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][now.getDay()];
+  $('bigDay').textContent = now.getDate();
+  $('bigDateLabel').textContent = now.getFullYear() + '年' + (now.getMonth()+1) + '月 · ' + week;
+  $('dateLabel').textContent = now.getFullYear() + '.' + String(now.getMonth()+1).padStart(2,'0') + '.' + String(now.getDate()).padStart(2,'0') + ' ' + week;
+})();
+
+fetch('data/site-data.json').then(r => r.json()).then(data => {
+  const nick = data.nickname || '哑巴';
+  $('brandName').textContent = nick;
+  $('greeting').textContent = 'Hey, ' + nick + '!';
+  $('footerName').textContent = nick;
+  document.title = nick + '的主页';
+  if (data.quote) $('quoteText').textContent = data.quote;
+
+  const col = $('taskColumn');
+  col.innerHTML = '';
+  const tasks = (data.plans && data.plans['今日计划']) || [];
+  if (!tasks.length) {
+    col.innerHTML = '<div class="task-empty animate-fade-up" style="animation-delay:0.3s">今天还没有任务，去 Obsidian 的「个人计划」里添加吧</div>';
+  } else {
+    tasks.forEach((t, i) => {
+      const card = document.createElement('div');
+      card.className = 'task-card animate-fade-up' + (t.done ? ' done' : '');
+      card.style.animationDelay = (0.3 + i * 0.07) + 's';
+      card.innerHTML =
+        '<div class="task-row1"><div class="task-title">' + flagSvg + '<span></span></div>' +
+        '<span class="task-tag ' + (t.done ? 'tag-green' : 'tag-yellow') + '">' + (t.done ? '已完成' : '进行中') + '</span></div>' +
+        '<div class="task-row2"></div>';
+      card.querySelector('.task-title span').textContent = '今日任务 #' + (i + 1);
+      card.querySelector('.task-row2').textContent = t.text;
+      col.appendChild(card);
+    });
+  }
+
+  const fav = $('favLinks');
+  (data.favorites || []).forEach(l => {
+    const a = document.createElement('a');
+    a.className = 'link-item'; a.href = l.url; a.target = '_blank'; a.rel = 'noopener';
+    a.innerHTML = '<span></span>' + playSvg;
+    a.querySelector('span').textContent = l.name;
+    fav.appendChild(a);
+  });
+
+  const soc = $('socialLinks');
+  const socialEntries = Object.entries(data.links || {}).filter(([,u]) => u);
+  if (!socialEntries.length) {
+    soc.innerHTML = '<div style="padding:14px 4px;border-top:1px solid var(--line);font-size:13px;color:rgba(0,0,0,0.35)">还没填，去 Obsidian「关于我」里补充</div>';
+  } else {
+    socialEntries.forEach(([name, url]) => {
+      const a = document.createElement('a');
+      a.className = 'link-item'; a.href = url; a.target = '_blank'; a.rel = 'noopener';
+      a.innerHTML = '<span></span>' + playSvg;
+      a.querySelector('span').textContent = name;
+      soc.appendChild(a);
+    });
+  }
+
+  const grid = $('levelsGrid');
+  (data.levels || []).forEach((lv, i) => {
+    const a = document.createElement('a');
+    a.className = 'level-card animate-fade-up ' + lv.color;
+    a.href = lv.href || '#';
+    a.style.animationDelay = (0.5 + i * 0.08) + 's';
+    a.innerHTML =
+      '<div class="level-card-main">' +
+        '<div class="level-icon">' + (levelIcons[lv.color] || flagSvg) + '</div>' +
+        '<span class="level-status"></span>' +
+        '<div class="level-name"></div>' +
+        '<div class="level-desc"></div>' +
+        '<span class="level-enter">进入关卡 ' + arrowSvg + '</span>' +
+      '</div>';
+    a.querySelector('.level-status').textContent = lv.status;
+    a.querySelector('.level-name').textContent = lv.name;
+    a.querySelector('.level-desc').textContent = lv.desc;
+    grid.appendChild(a);
+  });
+}).catch(() => {
+  $('taskColumn').innerHTML = '<div class="task-empty">数据载入失败</div>';
+  $('quoteText').textContent = '';
+});
+</script>
+</body>
+</html>
