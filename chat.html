@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>管家 · 哑巴的主页</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #F0EFED;
+  --ink: #1a1a1a;
+  --ink-soft: rgba(0,0,0,0.55);
+  --card: #ffffff;
+  --line: rgba(0,0,0,0.08);
+  --blue: #4663BF;
+  --blue-soft: #DBECFC;
+  --serif: 'Instrument Serif', 'Songti SC', 'STSong', 'SimSun', serif;
+  --sans: 'Instrument Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html, body { height: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+.bg-video {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: -10;
+  background: linear-gradient(180deg, #b8d4ee 0%, #e8e6dd 62%, #9dbf8d 100%);
+}
+
+.font-serif-display { font-family: var(--serif); font-weight: 400; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { opacity: 0; animation: fadeUp 0.8s var(--ease) forwards; }
+
+/* ============ 布局骨架 ============ */
+.page {
+  height: 100dvh;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 640px) { .page { padding: 20px; } }
+.wrap {
+  max-width: 760px; margin: 0 auto; width: 100%;
+  display: flex; flex-direction: column;
+  flex: 1; min-height: 0;
+  gap: 12px;
+}
+
+/* ============ header pill ============ */
+.header-pill {
+  background: #fff;
+  border-radius: 999px;
+  padding: 10px 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+}
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.brand-dots {
+  width: 26px; height: 26px; background: #000; border-radius: 7px;
+  display: grid; grid-template-columns: 1fr 1fr; place-content: center; gap: 3px;
+}
+.brand-dots span { width: 4px; height: 4px; background: #fff; border-radius: 2px; }
+.brand-name { font-size: 26px; }
+.main-nav { display: none; gap: 32px; }
+@media (min-width: 1024px) { .main-nav { display: flex; } }
+.main-nav a {
+  font-size: 14px; color: rgba(0,0,0,0.45); text-decoration: none;
+  transition: color 0.2s;
+}
+.main-nav a:hover { color: #000; }
+.main-nav a.active { color: #000; font-weight: 500; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.level-chip {
+  font-size: 12px; padding: 6px 14px; border-radius: 999px;
+  background: #000; color: #fff;
+  white-space: nowrap;
+}
+
+/* ============ 档位切换胶囊 ============ */
+.mode-bar {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.mode-pill {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.75);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+.mode-pill:hover { border-color: rgba(70,99,191,0.5); color: var(--ink); }
+.mode-pill.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+  font-weight: 500;
+}
+
+/* ============ 消息流 ============ */
+.chat-flow {
+  flex: 1; min-height: 0;
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+  gap: 10px;
+  padding: 8px 4px;
+  scrollbar-width: thin;
+}
+.msg-row { display: flex; }
+.msg-row.master { justify-content: flex-end; }
+.msg-row.butler { justify-content: flex-start; }
+
+.bubble {
+  max-width: 82%;
+  padding: 12px 16px;
+  font-size: 14.5px;
+  line-height: 1.7;
+  border-radius: 20px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  animation: fadeUp 0.35s var(--ease);
+}
+.bubble.butler {
+  background: var(--card);
+  border-bottom-left-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.bubble.master {
+  background: var(--blue);
+  color: #fff;
+  border-bottom-right-radius: 6px;
+  box-shadow: 0 1px 3px rgba(70,99,191,0.25);
+}
+.bubble-meta {
+  display: block;
+  font-size: 11px;
+  margin-top: 6px;
+  opacity: 0.55;
+}
+
+/* 系统分隔消息（切档开场白） */
+.sys-divider {
+  align-self: center;
+  max-width: 92%;
+  background: rgba(255,255,255,0.85);
+  border: 1px dashed rgba(70,99,191,0.4);
+  border-radius: 16px;
+  padding: 12px 18px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink);
+  animation: fadeUp 0.35s var(--ease);
+}
+.sys-divider .sys-tag {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--blue);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* 打字占位动画 */
+.typing {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--ink-soft); font-size: 13px;
+}
+.typing .dots { display: inline-flex; gap: 4px; }
+.typing .dots span {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--blue);
+  animation: blink 1.2s infinite;
+}
+.typing .dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing .dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink {
+  0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* ============ 底部输入栏 ============ */
+.input-bar {
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  padding: 10px 10px 10px 18px;
+  display: flex; align-items: flex-end; gap: 10px;
+}
+.input-bar textarea {
+  flex: 1;
+  border: none; outline: none; resize: none;
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  max-height: 120px;
+  background: transparent;
+  color: var(--ink);
+}
+.input-bar textarea::placeholder { color: rgba(0,0,0,0.35); }
+.send-btn {
+  flex-shrink: 0;
+  border: none; cursor: pointer;
+  background: var(--blue);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 14px; font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 999px;
+  transition: transform 0.15s var(--ease), opacity 0.15s;
+}
+.send-btn:hover { transform: translateY(-1px); }
+.send-btn:disabled { opacity: 0.45; cursor: default; transform: none; }
+
+/* ============ 口令门 ============ */
+.gate {
+  position: fixed; inset: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  background: rgba(240,239,237,0.72);
+  backdrop-filter: blur(10px);
+}
+.gate-card {
+  width: 100%; max-width: 380px;
+  background: var(--card);
+  border-radius: 24px;
+  padding: 32px 28px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.10);
+  text-align: center;
+  animation: fadeUp 0.6s var(--ease);
+}
+.gate-card h1 { font-size: 30px; margin-bottom: 10px; }
+.gate-card p {
+  font-size: 13.5px; color: var(--ink-soft);
+  line-height: 1.7; margin-bottom: 22px;
+}
+.gate-input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 18px;
+  font-family: var(--sans);
+  text-align: center;
+  letter-spacing: 0.35em;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 14px;
+}
+.gate-input:focus { border-color: var(--blue); }
+.gate-btn {
+  width: 100%;
+  border: none; cursor: pointer;
+  background: #000; color: #fff;
+  font-family: var(--sans);
+  font-size: 14px; font-weight: 500;
+  padding: 12px;
+  border-radius: 999px;
+  transition: opacity 0.15s;
+}
+.gate-btn:hover { opacity: 0.85; }
+.gate-error {
+  font-size: 12.5px; color: #c0392b;
+  margin-top: 12px; min-height: 18px;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+.gate-card.shake { animation: shake 0.4s var(--ease); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<!-- 全屏背景视频：固定在最底层 -->
+<video class="bg-video" autoplay loop muted playsinline src="/assets/bg.mp4"></video>
+
+<div class="page">
+  <div class="wrap">
+
+    <!-- header -->
+    <header class="header-pill">
+      <a class="brand" href="index.html">
+        <span class="brand-dots"><span></span><span></span><span></span><span></span></span>
+        <span class="brand-name font-serif-display">哑巴</span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html">首页</a>
+        <a href="english.html">英语·词根</a>
+        <a href="coding.html">程序</a>
+        <a href="chat.html" class="active">管家</a>
+      </nav>
+      <div class="header-right">
+        <span class="level-chip">对话 · 演示模式</span>
+      </div>
+    </header>
+
+    <!-- 四档切换 -->
+    <div class="mode-bar" id="modeBar">
+      <button class="mode-pill active" data-mode="butler">管家</button>
+      <button class="mode-pill" data-mode="english">英语陪练</button>
+      <button class="mode-pill" data-mode="book">书友</button>
+      <button class="mode-pill" data-mode="plan">计划监督员</button>
+    </div>
+
+    <!-- 消息流 -->
+    <div class="chat-flow" id="chatFlow"></div>
+
+    <!-- 输入栏 -->
+    <div class="input-bar">
+      <textarea id="msgInput" rows="1" placeholder="说点什么。反正都会被记下来。"></textarea>
+      <button class="send-btn" id="sendBtn">发送</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- 口令门 -->
+<div class="gate" id="gate">
+  <div class="gate-card" id="gateCard">
+    <h1 class="font-serif-display">口令</h1>
+    <p>报上口令。说错的话，我会记下这次尝试。<br>说对了，门就开——记录从那一刻开始。</p>
+    <input class="gate-input" id="gateInput" type="password" inputmode="numeric" maxlength="6" placeholder="······" autocomplete="off">
+    <button class="gate-btn" id="gateBtn">验证</button>
+    <div class="gate-error" id="gateError"></div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ============ 口令门 ============ */
+const PASSWORD = '070207';
+const TOKEN_KEY = 'butler_token';
+
+function unlock() {
+  $('gate').style.display = 'none';
+  startSession();
+}
+function tryGate() {
+  const v = $('gateInput').value.trim();
+  if (v === PASSWORD) {
+    localStorage.setItem(TOKEN_KEY, v);
+    unlock();
+  } else {
+    const card = $('gateCard');
+    card.classList.remove('shake');
+    void card.offsetWidth; /* 重触发动画 */
+    card.classList.add('shake');
+    $('gateError').textContent = '口令不符。本次尝试已记录在案。';
+    $('gateInput').value = '';
+    $('gateInput').focus();
+  }
+}
+$('gateBtn').addEventListener('click', tryGate);
+$('gateInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryGate(); });
+
+if (localStorage.getItem(TOKEN_KEY) === PASSWORD) {
+  unlock();
+} else {
+  $('gateInput').focus();
+}
+
+/* ============ 档位与开场白（源自角色卡-管家-v1.0） ============ */
+const MODES = {
+  butler: {
+    label: '管家',
+    greeting: '我是管家。从这条消息起，你说过的、做过的、计划又放下的，我都会如实记录。不安慰，不鼓励，不报假数据。丑话说在前面了——现在，说点什么吧。第一句说什么都行，反正都会被记下来。'
+  },
+  english: {
+    label: '英语陪练',
+    greeting: '英语陪练档已启用。没变：不鼓励、报数据、错的全标。变了：从现在起我只用英语，你的错误我会逐条记录，攒够 5 条讲一次。Ready when you are. First sentence is free —— 第一句不记分。'
+  },
+  book: {
+    label: '书友',
+    greeting: '书友档已启用。没变：我会追问"哪句话戳到你"，不接受"挺好"这种零信息量书评。变了：这个档位里我们谈书不谈计划，你的打卡数据我暂时不看。报书名。读到哪页了？'
+  },
+  plan: {
+    label: '计划监督员',
+    greeting: '监督档已启用。没变：照旧报数。变了：这个档位里我会主动开口——你有 2 项计划今日未完成，分别已逾期 X 小时和 X 小时。先说哪个？'
+  }
+};
+let currentMode = 'butler';
+let sessionStarted = false;
+
+function startSession() {
+  if (sessionStarted) return;
+  sessionStarted = true;
+  /* 默认档首次进入：插入 first_mes 作为系统分隔消息 */
+  addDivider(MODES.butler.label, MODES.butler.greeting);
+}
+
+/* 切档 */
+$('modeBar').addEventListener('click', e => {
+  const btn = e.target.closest('.mode-pill');
+  if (!btn || btn.dataset.mode === currentMode) return;
+  currentMode = btn.dataset.mode;
+  document.querySelectorAll('.mode-pill').forEach(p =>
+    p.classList.toggle('active', p.dataset.mode === currentMode));
+  addDivider(MODES[currentMode].label, MODES[currentMode].greeting);
+});
+
+/* ============ 消息渲染 ============ */
+const flow = $('chatFlow');
+function scrollBottom() { flow.scrollTop = flow.scrollHeight; }
+
+function addDivider(label, text) {
+  const el = document.createElement('div');
+  el.className = 'sys-divider';
+  const tag = document.createElement('span');
+  tag.className = 'sys-tag';
+  tag.textContent = '— ' + label + '档 · 已切换 —';
+  const body = document.createElement('span');
+  body.textContent = text;
+  el.appendChild(tag);
+  el.appendChild(body);
+  flow.appendChild(el);
+  scrollBottom();
+}
+
+function addBubble(who, text) {
+  const row = document.createElement('div');
+  row.className = 'msg-row ' + who;
+  const b = document.createElement('div');
+  b.className = 'bubble ' + who;
+  b.textContent = text;
+  row.appendChild(b);
+  flow.appendChild(row);
+  scrollBottom();
+  return row;
+}
+
+function addTyping() {
+  const row = document.createElement('div');
+  row.className = 'msg-row butler';
+  row.innerHTML =
+    '<div class="bubble butler"><span class="typing">管家正在记录' +
+    '<span class="dots"><span></span><span></span><span></span></span></span></div>';
+  flow.appendChild(row);
+  scrollBottom();
+  return row;
+}
+
+/* ============ 假后端（mock） ============ */
+const MOCK_REPLIES = [
+  '已记录。测试模式，不计入档案。',
+  '收到。等真正的我上线，这条会重新评估。',
+  '已归档——暂时。后端还没建好，这条记录只存在你的浏览器里，刷新即焚。',
+  '记下了。补充说明：当前为演示模式，我的记忆力截至本次页面生命周期。',
+  '收到。正式版上线前，所有对话一律视为彩排。'
+];
+let mockIdx = 0;
+
+/**
+ * 发送消息给管家并拿回回复。
+ * 现在是 mock：约 0.8 秒后轮换返回固定文案。
+ * 正式版改为 fetch('/api/chat', { method: 'POST', headers: { 'X-Token': <口令> }, body: JSON.stringify({ message, mode }) }) 并解析响应——只动这一个函数。
+ */
+function askButler(message, mode) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const reply = MOCK_REPLIES[mockIdx % MOCK_REPLIES.length];
+      mockIdx++;
+      resolve(reply);
+    }, 800);
+  });
+}
+
+/* ============ 发送流程 ============ */
+const input = $('msgInput');
+const sendBtn = $('sendBtn');
+let sending = false;
+
+async function send() {
+  const text = input.value.trim();
+  if (!text || sending) return;
+  sending = true;
+  sendBtn.disabled = true;
+
+  addBubble('master', text);
+  input.value = '';
+  autoGrow();
+
+  const typingRow = addTyping();
+  const reply = await askButler(text, currentMode);
+  typingRow.remove();
+  addBubble('butler', reply);
+
+  sending = false;
+  sendBtn.disabled = false;
+  input.focus();
+}
+
+function autoGrow() {
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+}
+input.addEventListener('input', autoGrow);
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    send();
+  }
+});
+sendBtn.addEventListener('click', send);
+</script>
+</body>
+</html>
