@@ -108,7 +108,7 @@ def call_model(system_prompt, messages):
         "model": MODEL,
         "messages": [{"role": "system", "content": system_prompt}] + messages,
         "temperature": 0.7,
-        "max_tokens": 1200,
+        "max_tokens": 4096,
     }
     req = urllib.request.Request(
         API_URL,
@@ -121,7 +121,16 @@ def call_model(system_prompt, messages):
     )
     with urllib.request.urlopen(req, timeout=90) as resp:
         data = json.loads(resp.read().decode("utf-8"))
-    return data["choices"][0]["message"]["content"]
+    choice = data["choices"][0]
+    content = choice["message"].get("content") or ""
+    if not content:
+        # 空回复诊断：把死因带出来，方便排查（思考耗尽 / 内容过滤等）
+        reason = choice.get("finish_reason", "?")
+        has_thinking = bool(choice["message"].get("reasoning_content"))
+        usage = data.get("usage", {})
+        return (f"（管家沉默了。调试信息：finish_reason={reason}，"
+                f"有思考内容={has_thinking}，用量={usage}。把这条发给 Kimi。）")
+    return content
 
 
 @app.route("/api/chat", methods=["POST"])
