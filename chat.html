@@ -384,11 +384,8 @@ function tryGate() {
 $('gateBtn').addEventListener('click', tryGate);
 $('gateInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryGate(); });
 
-if (localStorage.getItem(TOKEN_KEY) === PASSWORD) {
-  unlock();
-} else {
-  $('gateInput').focus();
-}
+/* 自动开门逻辑挪到脚本末尾执行（见文件底部）——
+   若放在这里，MODES 等常量尚未初始化，整个脚本会直接崩掉 */
 
 /* ============ 档位与开场白（源自角色卡-管家-v1.0） ============ */
 const MODES = {
@@ -542,6 +539,13 @@ input.addEventListener('keydown', e => {
   }
 });
 sendBtn.addEventListener('click', send);
+
+/* ============ 自动开门（必须放最后：等 MODES 等常量初始化完再跑） ============ */
+if (localStorage.getItem(TOKEN_KEY) === PASSWORD) {
+  unlock();
+} else {
+  $('gateInput').focus();
+}
 </script>
 </body>
 </html>
