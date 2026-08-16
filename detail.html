@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>词根详情 — 哑巴的主页</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #F0EFED;
+  --ink: #1a1a1a;
+  --ink-soft: rgba(0,0,0,0.55);
+  --card: #ffffff;
+  --line: rgba(0,0,0,0.08);
+  --blue: #4663BF;
+  --blue-light: #a1ccf7;
+  --blue-pill: #DBECFC;
+  --serif: 'Instrument Serif', 'Songti SC', 'STSong', 'SimSun', serif;
+  --sans: 'Instrument Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.bg-video {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: -10;
+  background: linear-gradient(180deg, #b8d4ee 0%, #e8e6dd 62%, #9dbf8d 100%);
+}
+
+.font-serif-display { font-family: var(--serif); font-weight: 400; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { opacity: 0; animation: fadeUp 0.8s var(--ease) forwards; }
+
+.page { min-height: 100vh; padding: 16px; }
+@media (min-width: 640px) { .page { padding: 24px; } }
+@media (min-width: 1024px) { .page { padding: 32px; } }
+.wrap { max-width: 1000px; margin: 0 auto; }
+
+/* ============ header pill ============ */
+.header-pill {
+  background: #fff;
+  border-radius: 999px;
+  padding: 10px 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+}
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.brand-dots {
+  width: 26px; height: 26px; background: #000; border-radius: 7px;
+  display: grid; grid-template-columns: 1fr 1fr; place-content: center; gap: 3px;
+}
+.brand-dots span { width: 4px; height: 4px; background: #fff; border-radius: 2px; }
+.brand-name { font-size: 26px; }
+.main-nav { display: none; gap: 32px; }
+@media (min-width: 1024px) { .main-nav { display: flex; } }
+.main-nav a {
+  font-size: 14px; color: rgba(0,0,0,0.45); text-decoration: none;
+  transition: color 0.2s;
+}
+.main-nav a:hover { color: #000; }
+.main-nav a.active { color: #000; font-weight: 500; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.level-chip {
+  font-size: 12px; padding: 6px 14px; border-radius: 999px;
+  background: #000; color: #fff;
+}
+
+/* ============ back link ============ */
+.back-row { margin-top: 24px; padding: 0 4px; }
+.back-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14px; color: var(--ink-soft); text-decoration: none;
+  padding: 8px 4px;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--blue); }
+.back-link svg { width: 15px; height: 15px; }
+
+/* ============ root hero ============ */
+.root-hero {
+  margin-top: 16px;
+  background: var(--card);
+  border-radius: 24px;
+  padding: 32px 28px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+@media (min-width: 640px) { .root-hero { padding: 40px 44px; } }
+.root-hero-top { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.root-hero-name {
+  font-family: var(--serif); font-size: 56px; line-height: 1;
+  color: var(--blue); letter-spacing: -0.01em;
+}
+@media (min-width: 640px) { .root-hero-name { font-size: 72px; } }
+.root-hero-status {
+  font-size: 11px; padding: 4px 12px; border-radius: 999px;
+  background: var(--blue-pill); color: #1d4ed8; font-weight: 500;
+}
+.root-hero-meaning { font-size: 20px; font-weight: 500; margin-top: 14px; }
+.root-hero-note { font-size: 13.5px; color: var(--ink-soft); line-height: 1.7; margin-top: 8px; }
+.root-hero-meta { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
+.meta-label {
+  font-size: 11px; letter-spacing: 0.08em; color: rgba(0,0,0,0.4);
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.variant-row { font-size: 15px; font-family: var(--serif); color: var(--blue); letter-spacing: 0.03em; }
+.word-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.word-chip {
+  font-size: 12.5px; padding: 5px 12px; border-radius: 999px;
+  background: #F4F7FE; border: 1px solid rgba(70,99,191,0.14);
+  color: #34518f; font-family: var(--serif); letter-spacing: 0.02em;
+}
+
+/* ============ tabs ============ */
+.tabs {
+  margin-top: 24px;
+  display: flex; gap: 8px;
+  background: var(--card);
+  border-radius: 999px;
+  padding: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.tab-btn {
+  flex: 1;
+  border: none; cursor: pointer;
+  font-family: var(--sans); font-size: 15px; font-weight: 500;
+  padding: 14px 12px; border-radius: 999px;
+  background: transparent; color: var(--ink-soft);
+  transition: background 0.25s var(--ease), color 0.25s var(--ease);
+  min-height: 48px;
+}
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active { background: var(--blue); color: #fff; }
+
+/* ============ note content ============ */
+.note-card {
+  margin-top: 20px;
+  background: var(--card);
+  border-radius: 24px;
+  padding: 32px 24px 44px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  min-height: 240px;
+}
+@media (min-width: 640px) { .note-card { padding: 44px 48px 56px; } }
+.note-body { max-width: 720px; margin: 0 auto; }
+.note-body {
+  font-size: 16px; line-height: 1.8; color: rgba(0,0,0,0.82);
+  overflow-wrap: break-word;
+}
+.note-body h1, .note-body h2, .note-body h3, .note-body h4 {
+  font-family: var(--serif); font-weight: 400; color: var(--ink);
+  line-height: 1.35; margin: 1.6em 0 0.6em;
+}
+.note-body h1 { font-size: 30px; }
+.note-body h2 { font-size: 26px; }
+.note-body h3 { font-size: 21px; }
+.note-body h4 { font-size: 18px; }
+.note-body p { margin: 0.9em 0; }
+.note-body ul, .note-body ol { margin: 0.9em 0; padding-left: 1.6em; }
+.note-body li { margin: 0.35em 0; }
+.note-body strong { color: var(--ink); }
+.note-body em { color: var(--blue); font-style: normal; font-family: var(--serif); }
+.note-body blockquote {
+  margin: 1.2em 0; padding: 4px 0 4px 18px;
+  border-left: 3px solid var(--blue-light);
+  color: var(--ink-soft);
+}
+.note-body hr { border: none; border-top: 1px solid var(--line); margin: 2em 0; }
+.note-body code {
+  font-size: 0.9em; background: #F4F7FE; padding: 2px 7px; border-radius: 6px;
+  color: #34518f;
+}
+.note-body a { color: var(--blue); }
+.note-body img { max-width: 100%; border-radius: 12px; }
+
+.note-loading, .note-empty {
+  max-width: 720px; margin: 0 auto;
+  text-align: center; color: var(--ink-soft);
+  font-size: 14.5px; line-height: 1.9;
+  padding: 48px 16px;
+}
+.note-empty .empty-title { font-size: 18px; color: var(--ink); font-weight: 500; margin-bottom: 8px; }
+.note-empty a { color: var(--blue); text-decoration: none; font-weight: 500; }
+.note-empty a:hover { text-decoration: underline; }
+
+/* ============ invalid root state ============ */
+.invalid-card {
+  margin-top: 48px;
+  background: var(--card); border-radius: 24px;
+  padding: 56px 28px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.invalid-card h1 { font-family: var(--serif); font-size: 28px; font-weight: 400; margin-bottom: 12px; }
+.invalid-card p { color: var(--ink-soft); font-size: 14.5px; line-height: 1.8; }
+.invalid-card a { color: var(--blue); text-decoration: none; font-weight: 500; }
+.invalid-card a:hover { text-decoration: underline; }
+
+/* footer */
+.footer {
+  margin-top: 64px; padding: 24px 4px 8px;
+  border-top: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
+  color: var(--ink-soft); font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<!-- 全屏背景视频：固定在最底层，加载期间显示天空色渐变 -->
+<video class="bg-video" autoplay loop muted playsinline src="/assets/bg.mp4"></video>
+<div class="page">
+  <div class="wrap">
+
+    <!-- header -->
+    <header class="header-pill animate-fade-up" style="animation-delay: 0s">
+      <a class="brand" href="index.html">
+        <span class="brand-dots"><span></span><span></span><span></span><span></span></span>
+        <span class="brand-name font-serif-display" id="brandName">哑巴</span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html">首页</a>
+        <a href="english.html" class="active">英语·词根</a>
+        <a href="coding.html">程序</a>
+      </nav>
+      <div class="header-right">
+        <span class="level-chip">人生游戏 · 进行中</span>
+      </div>
+    </header>
+
+    <!-- back link -->
+    <div class="back-row animate-fade-up" style="animation-delay: 0.08s">
+      <a class="back-link" href="english.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回词根墙
+      </a>
+    </div>
+
+    <!-- main content (filled by script) -->
+    <main id="main"></main>
+
+    <footer class="footer">
+      <span>© 2026 <span id="footerName">哑巴</span> · 用 Obsidian 驱动</span>
+      <span>人生游戏 v0.1</span>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* nickname (shared with homepage) */
+fetch('data/site-data.json').then(r => r.json()).then(data => {
+  const nick = data.nickname || '哑巴';
+  $('brandName').textContent = nick;
+  $('footerName').textContent = nick;
+}).catch(() => {});
+
+/* ---- helpers ---- */
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+/* slug: 词根名去掉末尾连字符，如 "ab-" → "ab" */
+function slugOf(name) {
+  return String(name).replace(/-+\s*$/, '');
+}
+/* 只允许小写字母，杜绝路径穿越 */
+function validSlug(s) {
+  return /^[a-z]+$/.test(s);
+}
+
+/* ---- invalid root fallback ---- */
+function showInvalid() {
+  document.title = '找不到这个词根 — 哑巴的主页';
+  $('main').innerHTML =
+    '<section class="invalid-card animate-fade-up" style="animation-delay: 0.15s">' +
+      '<h1>没有找到这个词根</h1>' +
+      '<p>链接里的词根参数不存在，可能还没有被攻克。<br>回词根墙看看已经点亮的词根吧。</p>' +
+      '<p style="margin-top:18px"><a href="english.html">← 返回英语·词根页</a></p>' +
+    '</section>';
+}
+
+/* ---- note fragment loading ---- */
+const TABS = [
+  { key: 'coach',     label: '词汇教练' },
+  { key: 'historian', label: '词源史官' }
+];
+
+function emptyHtml(slug) {
+  return '<div class="note-empty">' +
+    '<div class="empty-title">这篇笔记还没同步上来</div>' +
+    '先去 Obsidian 看看吧，同步之后这里会自动更新。' +
+  '</div>';
+}
+
+async function loadTab(slug, key, panel) {
+  panel.innerHTML = '<div class="note-loading">笔记载入中……</div>';
+  try {
+    const r = await fetch('roots/' + encodeURIComponent(slug) + '-' + key + '.html');
+    if (!r.ok) throw new Error('missing');
+    const html = await r.text();
+    if (!html.trim()) throw new Error('empty');
+    panel.innerHTML = '<div class="note-body">' + html + '</div>';
+  } catch (e) {
+    panel.innerHTML = emptyHtml(slug);
+  }
+}
+
+/* ---- render detail page ---- */
+function render(root) {
+  const slug = slugOf(root.name);
+  document.title = root.name + ' ' + root.meaning + ' — 哑巴的主页';
+
+  const variants = root.variants && root.variants.length
+    ? root.variants.map(esc).join('　')
+    : '无变体';
+  const chips = (root.words || []).map(w => '<span class="word-chip">' + esc(w) + '</span>').join('');
+
+  $('main').innerHTML =
+    '<section class="root-hero animate-fade-up" style="animation-delay: 0.15s">' +
+      '<div class="root-hero-top">' +
+        '<span class="root-hero-name">' + esc(root.name) + '</span>' +
+        '<span class="root-hero-status">' + esc(root.status) + '</span>' +
+      '</div>' +
+      '<div class="root-hero-meaning">' + esc(root.meaning) + '</div>' +
+      '<p class="root-hero-note">' + esc(root.note || '') + '</p>' +
+      '<div class="root-hero-meta">' +
+        '<div><div class="meta-label">变体 Variants</div><div class="variant-row">' + variants + '</div></div>' +
+        '<div><div class="meta-label">代表词 Words</div><div class="word-chips">' + chips + '</div></div>' +
+      '</div>' +
+    '</section>' +
+
+    '<div class="tabs animate-fade-up" style="animation-delay: 0.24s" role="tablist">' +
+      TABS.map((t, i) =>
+        '<button class="tab-btn' + (i === 0 ? ' active' : '') + '" role="tab" data-key="' + t.key + '">' + t.label + '</button>'
+      ).join('') +
+    '</div>' +
+
+    '<section class="note-card animate-fade-up" style="animation-delay: 0.3s">' +
+      '<div id="notePanel"></div>' +
+    '</section>';
+
+  const panel = $('notePanel');
+  const buttons = Array.from(document.querySelectorAll('.tab-btn'));
+
+  function activate(key) {
+    buttons.forEach(b => b.classList.toggle('active', b.dataset.key === key));
+    loadTab(slug, key, panel);
+  }
+  buttons.forEach(b => b.addEventListener('click', () => activate(b.dataset.key)));
+
+  /* 默认打开第一个标签 */
+  activate(TABS[0].key);
+}
+
+/* ---- boot ---- */
+(function () {
+  const slug = new URLSearchParams(location.search).get('root') || '';
+  if (!validSlug(slug)) { showInvalid(); return; }
+
+  fetch('data/roots.json').then(r => {
+    if (!r.ok) throw new Error('roots fetch failed');
+    return r.json();
+  }).then(roots => {
+    const root = roots.find(x => slugOf(x.name) === slug);
+    if (!root) { showInvalid(); return; }
+    render(root);
+  }).catch(() => {
+    $('main').innerHTML =
+      '<section class="invalid-card animate-fade-up" style="animation-delay: 0.15s">' +
+        '<h1>词根数据载入失败</h1>' +
+        '<p>请检查 data/roots.json 是否存在，或稍后再试。</p>' +
+        '<p style="margin-top:18px"><a href="english.html">← 返回英语·词根页</a></p>' +
+      '</section>';
+  });
+})();
+</script>
+</body>
+</html>

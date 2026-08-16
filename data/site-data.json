@@ -3,9 +3,27 @@
   "tagline": "把人生当成一场游戏",
   "quote": "产品经理不怕失败，怕成功，因为失败带来的是伤口，成功带来的是手瘾。",
   "levels": [
-    { "name": "英语·词根", "color": "blue", "status": "进行中", "desc": "用词根词缀拆解单词，一关一关打穿词汇量。", "href": "#" },
-    { "name": "程序", "color": "green", "status": "进行中", "desc": "从建这个网站开始，一步一步学会写代码。", "href": "#" },
-    { "name": "下一关", "color": "orange", "status": "敬请期待", "desc": "健身？读书？新技能？想好再解锁。", "href": "#" }
+    {
+      "name": "英语·词根",
+      "color": "blue",
+      "status": "进行中",
+      "desc": "用词根词缀拆解单词，一关一关打穿词汇量。",
+      "href": "english.html"
+    },
+    {
+      "name": "程序",
+      "color": "green",
+      "status": "进行中",
+      "desc": "从建这个网站开始，一步一步学会写代码。",
+      "href": "coding.html"
+    },
+    {
+      "name": "下一关",
+      "color": "orange",
+      "status": "敬请期待",
+      "desc": "健身？读书？新技能？想好再解锁。",
+      "href": "#"
+    }
   ],
   "links": {
     "GitHub": "",
@@ -14,15 +32,49 @@
     "B站": ""
   },
   "favorites": [
-    { "name": "哔哩哔哩", "url": "https://www.bilibili.com" },
-    { "name": "GitHub", "url": "https://github.com" },
-    { "name": "知乎", "url": "https://www.zhihu.com" }
+    {
+      "name": "哔哩哔哩",
+      "url": "https://www.bilibili.com"
+    },
+    {
+      "name": "GitHub",
+      "url": "https://github.com"
+    },
+    {
+      "name": "知乎",
+      "url": "https://www.zhihu.com"
+    }
   ],
   "plans": {
     "今日计划": [
-      { "text": "健身 30 分钟", "done": false },
-      { "text": "读 10 页书", "done": false },
-      { "text": "搭好个人网站", "done": true }
+      {
+        "text": "示例任务：健身 30 分钟",
+        "done": false
+      },
+      {
+        "text": "示例任务：读 10 页书",
+        "done": false
+      },
+      {
+        "text": "示例任务：搭好个人网站",
+        "done": true
+      }
+    ],
+    "待办清单": [
+      {
+        "text": "示例：给网站想一个正式的名字",
+        "done": false
+      },
+      {
+        "text": "示例：买域名（可选）",
+        "done": false
+      }
+    ],
+    "本周目标": [
+      {
+        "text": "示例：完成个人主页第一版",
+        "done": false
+      }
     ]
   }
 }

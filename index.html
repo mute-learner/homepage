@@ -35,22 +35,28 @@ body {
   width: 100%; height: 100%;
   object-fit: cover;
   z-index: -10;
+  /* 视频加载出来之前的过渡底色：天空蓝 → 米白 → 草绿 */
   background: linear-gradient(180deg, #b8d4ee 0%, #e8e6dd 62%, #9dbf8d 100%);
 }
 
 .font-serif-display { font-family: var(--serif); font-weight: 400; }
 
+/* entrance animation */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-up { opacity: 0; animation: fadeUp 0.8s var(--ease) forwards; }
 
-.page { min-height: 100vh; padding: 16px; }
+.page {
+  min-height: 100vh;
+  padding: 16px;
+}
 @media (min-width: 640px) { .page { padding: 24px; } }
 @media (min-width: 1024px) { .page { padding: 32px; } }
 .wrap { max-width: 1400px; margin: 0 auto; }
 
+/* ============ header pill ============ */
 .header-pill {
   background: #fff;
   border-radius: 999px;
@@ -80,6 +86,7 @@ body {
   background: #000; color: #fff;
 }
 
+/* ============ section header row ============ */
 .section-row {
   border-bottom: 1px solid var(--line);
   padding: 28px 4px 24px;
@@ -100,6 +107,7 @@ body {
 }
 .section-row .date-label { flex: 1; text-align: right; color: var(--ink-soft); font-size: 14px; min-width: 160px; }
 
+/* ============ main grid ============ */
 .main-grid { display: flex; flex-direction: column; gap: 24px; }
 @media (min-width: 1024px) {
   .main-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 28px; }
@@ -109,6 +117,7 @@ body {
 }
 .col-left, .col-center, .col-right { display: flex; flex-direction: column; gap: 24px; }
 
+/* left: game pill */
 .game-pill {
   background: var(--blue-pill);
   border-radius: 999px;
@@ -123,11 +132,15 @@ body {
 .game-pill .gp-title { font-weight: 600; font-size: 15px; }
 .game-pill .gp-sub { font-size: 12px; color: rgba(0,0,0,0.5); }
 
+/* left: big date */
 .big-date { padding: 4px 8px; }
-.big-date .num { font-size: 88px; letter-spacing: -0.04em; line-height: 0.95; font-weight: 600; }
+.big-date .num {
+  font-size: 88px; letter-spacing: -0.04em; line-height: 0.95; font-weight: 600;
+}
 @media (min-width: 1024px) { .big-date .num { font-size: 110px; } }
 .big-date .label { color: var(--ink-soft); margin-top: 8px; font-size: 14px; }
 
+/* left: quote card */
 .quote-card {
   border-radius: 24px;
   background: linear-gradient(160deg, #fbbf24 0%, #f59e0b 55%, #ea580c 100%);
@@ -138,8 +151,11 @@ body {
   display: inline-block; font-size: 11px; padding: 4px 12px; border-radius: 999px;
   background: rgba(255,255,255,0.25); margin-bottom: 14px; font-weight: 500;
 }
-.quote-card .qc-text { font-family: var(--serif); font-size: 20px; line-height: 1.5; }
+.quote-card .qc-text {
+  font-family: var(--serif); font-size: 20px; line-height: 1.5;
+}
 
+/* center: task cards */
 .task-card {
   background: var(--card);
   border-radius: 24px;
@@ -159,6 +175,8 @@ body {
   text-align: center; color: var(--ink-soft); font-size: 14px;
 }
 
+/* right: links list */
+.links-card { }
 .links-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .links-head .star-circle {
   width: 34px; height: 34px; background: #fff; border-radius: 50%;
@@ -176,6 +194,7 @@ body {
 .link-item svg { width: 14px; height: 14px; color: rgba(0,0,0,0.4); flex-shrink: 0; }
 .links-group-label { font-size: 12px; color: var(--ink-soft); margin: 18px 4px 4px; letter-spacing: 0.08em; }
 
+/* ============ levels section ============ */
 .levels { margin-top: 56px; }
 .levels-head { margin-bottom: 24px; padding: 0 4px; }
 .levels-head h2 { font-size: 28px; }
@@ -234,6 +253,7 @@ body {
 }
 .level-card:hover .level-enter { gap: 12px; }
 
+/* footer */
 .footer {
   margin-top: 64px; padding: 24px 4px 8px;
   border-top: 1px solid var(--line);
@@ -247,10 +267,12 @@ body {
 </style>
 </head>
 <body>
-<video class="bg-video" autoplay loop muted playsinline src="assets/bg.mp4"></video>
+<!-- 全屏背景视频：固定在最底层，加载期间显示天空色渐变 -->
+<video class="bg-video" autoplay loop muted playsinline src="/assets/bg.mp4"></video>
 <div class="page">
   <div class="wrap">
 
+    <!-- header -->
     <header class="header-pill animate-fade-up" style="animation-delay: 0s">
       <a class="brand" href="#">
         <span class="brand-dots"><span></span><span></span><span></span><span></span></span>
@@ -258,14 +280,15 @@ body {
       </a>
       <nav class="main-nav">
         <a href="#" class="active">首页</a>
-        <a href="#levels">英语·词根</a>
-        <a href="#levels">程序</a>
+        <a href="english.html">英语·词根</a>
+        <a href="coding.html">程序</a>
       </nav>
       <div class="header-right">
         <span class="level-chip">人生游戏 · 进行中</span>
       </div>
     </header>
 
+    <!-- section header row -->
     <div class="section-row animate-fade-up" style="animation-delay: 0.1s">
       <div class="greeting">
         <span class="avatar">
@@ -277,8 +300,10 @@ body {
       <div class="date-label" id="dateLabel"></div>
     </div>
 
+    <!-- main grid -->
     <div class="main-grid">
 
+      <!-- left -->
       <div class="col-left">
         <div class="game-pill animate-fade-up" style="animation-delay: 0.15s">
           <span class="x-circle">
@@ -301,10 +326,12 @@ body {
         </div>
       </div>
 
+      <!-- center: tasks -->
       <div class="col-center" id="taskColumn">
         <div class="task-empty animate-fade-up" style="animation-delay: 0.3s">任务载入中……</div>
       </div>
 
+      <!-- right -->
       <div class="col-right">
         <div class="links-card animate-fade-up" style="animation-delay: 0.35s">
           <div class="links-head">
@@ -319,6 +346,7 @@ body {
       </div>
     </div>
 
+    <!-- levels -->
     <section class="levels" id="levels">
       <div class="levels-head animate-fade-up" style="animation-delay: 0.45s">
         <h2>选择你的关卡</h2>
@@ -345,6 +373,7 @@ const codeSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 const lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 const levelIcons = { blue: bookSvg, green: codeSvg, orange: lockSvg };
 
+/* date widgets */
 (function () {
   const now = new Date();
   const week = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][now.getDay()];
@@ -361,6 +390,7 @@ fetch('data/site-data.json').then(r => r.json()).then(data => {
   document.title = nick + '的主页';
   if (data.quote) $('quoteText').textContent = data.quote;
 
+  /* tasks */
   const col = $('taskColumn');
   col.innerHTML = '';
   const tasks = (data.plans && data.plans['今日计划']) || [];
@@ -381,6 +411,7 @@ fetch('data/site-data.json').then(r => r.json()).then(data => {
     });
   }
 
+  /* favorites */
   const fav = $('favLinks');
   (data.favorites || []).forEach(l => {
     const a = document.createElement('a');
@@ -390,6 +421,7 @@ fetch('data/site-data.json').then(r => r.json()).then(data => {
     fav.appendChild(a);
   });
 
+  /* social */
   const soc = $('socialLinks');
   const socialEntries = Object.entries(data.links || {}).filter(([,u]) => u);
   if (!socialEntries.length) {
@@ -404,6 +436,7 @@ fetch('data/site-data.json').then(r => r.json()).then(data => {
     });
   }
 
+  /* levels */
   const grid = $('levelsGrid');
   (data.levels || []).forEach((lv, i) => {
     const a = document.createElement('a');

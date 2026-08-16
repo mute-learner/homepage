@@ -1,0 +1,90 @@
+[
+  {
+    "name": "ab-",
+    "meaning": "离开 / 脱离",
+    "variants": ["abs-", "a-"],
+    "words": ["absent", "abstract", "avert"],
+    "note": "在 t、v 前变形为 abs- / a-",
+    "status": "已攻克"
+  },
+  {
+    "name": "ad-",
+    "meaning": "朝向 / 添加",
+    "variants": ["ac-", "af-", "ag-", "al-", "an-", "ap-", "ar-", "as-", "at-"],
+    "words": ["accept", "affect", "arrive"],
+    "note": "12+ 种同化变体，同化最复杂单项",
+    "status": "已攻克"
+  },
+  {
+    "name": "con-",
+    "meaning": "一起 / 彻底",
+    "variants": ["co-", "com-", "col-", "cor-"],
+    "words": ["connect", "combine", "collect"],
+    "note": "拉丁线同化一族，鼻音随词根首音变化",
+    "status": "已攻克"
+  },
+  {
+    "name": "de-",
+    "meaning": "向下 / 脱离 / 彻底",
+    "variants": [],
+    "words": ["descend", "depart", "defrost"],
+    "note": "三义同体，形态最稳定",
+    "status": "已攻克"
+  },
+  {
+    "name": "dis-",
+    "meaning": "分开 / 否定",
+    "variants": ["di-", "dif-"],
+    "words": ["dismiss", "dislike", "disperse"],
+    "note": "f 前同化为 dif-，元音前缩为 di-",
+    "status": "已攻克"
+  },
+  {
+    "name": "ex-",
+    "meaning": "向外",
+    "variants": ["e-", "ef-", "ec-"],
+    "words": ["exit", "emit", "effect"],
+    "note": "辅音前常脱落为 e-",
+    "status": "已攻克"
+  },
+  {
+    "name": "in-",
+    "meaning": "向内 / 否定",
+    "variants": ["im-", "il-", "ir-"],
+    "words": ["import", "impossible"],
+    "note": "双义双 PIE 源，变体按发音同化",
+    "status": "已攻克"
+  },
+  {
+    "name": "pre-",
+    "meaning": "在…之前",
+    "variants": [],
+    "words": ["preview", "predict", "prepare"],
+    "note": "最稳定的时间前缀，几乎不变形",
+    "status": "已攻克"
+  },
+  {
+    "name": "re-",
+    "meaning": "回 / 再 / 对抗",
+    "variants": [],
+    "words": ["return", "rewrite", "resist"],
+    "note": "三义：回退、重复、逆反",
+    "status": "已攻克"
+  },
+  {
+    "name": "se-",
+    "meaning": "分离",
+    "variants": [],
+    "words": ["separate", "secede"],
+    "note": "拉丁线少见的独立前缀",
+    "status": "已攻克"
+  },
+  {
+    "name": "syn-",
+    "meaning": "一起（希腊线）",
+    "variants": ["sym-", "syl-", "sys-"],
+    "words": ["synonym", "sympathy"],
+    "note": "希腊线，对应拉丁线的 con-",
+    "status": "已攻克"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "level": "Lv.1 · C语言修行中",
+  "progress": 35,
+  "milestones": [
+    { "date": "2026-07-13", "title": "知识库重建", "desc": "按 LLM Wiki 模式重建 Obsidian vault", "done": true },
+    { "date": "2026-07-17", "title": "GitHub 代码搜索 + Docker", "desc": "搞定代码搜索语法和开发环境概念", "done": true },
+    { "date": "2026-07-18", "title": "C语言基础 + C语言的本质", "desc": "main函数、变量、内存三区、四条定律", "done": true },
+    { "date": "2026-07-24", "title": "printf 与 scanf", "desc": "格式化输入输出全家桶", "done": true },
+    { "date": "2026-08-15", "title": "个人网站上线", "desc": "买服务器、装Nginx、部署主页", "done": true },
+    { "date": "", "title": "数组与函数", "desc": "批量处理数据 + 模块化", "done": false },
+    { "date": "", "title": "指针", "desc": "C语言最核心也最难的一关", "done": false }
+  ],
+  "skills": [
+    { "group": "C语言基础（16节全通）", "items": [
+      "程序入口 main 函数", "基本语法规则", "变量与数据类型", "字符串与 \\0",
+      "转义字符", "printf 格式化占位符", "编译与链接", "头文件与 #include",
+      "注释", "预处理指令", "main 的三种写法", "七种语句",
+      "选择与迭代语句", "结构化程序设计", "十类运算符", "占位符历史与跨语言对比"
+    ]}
+  ]
+}
