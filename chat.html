@@ -470,29 +470,31 @@ function addTyping() {
   return row;
 }
 
-/* ============ 假后端（mock） ============ */
-const MOCK_REPLIES = [
-  '已记录。测试模式，不计入档案。',
-  '收到。等真正的我上线，这条会重新评估。',
-  '已归档——暂时。后端还没建好，这条记录只存在你的浏览器里，刷新即焚。',
-  '记下了。补充说明：当前为演示模式，我的记忆力截至本次页面生命周期。',
-  '收到。正式版上线前，所有对话一律视为彩排。'
-];
-let mockIdx = 0;
+/* ============ 真后端 ============ */
+const history = []; // 本次会话历史（刷新清空；长期记忆在服务器的档案文件里）
 
 /**
  * 发送消息给管家并拿回回复。
- * 现在是 mock：约 0.8 秒后轮换返回固定文案。
- * 正式版改为 fetch('/api/chat', { method: 'POST', headers: { 'X-Token': <口令> }, body: JSON.stringify({ message, mode }) }) 并解析响应——只动这一个函数。
+ * POST /api/chat，header 带 X-Token（口令），body 带消息、档位和最近 20 条历史。
  */
-function askButler(message, mode) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const reply = MOCK_REPLIES[mockIdx % MOCK_REPLIES.length];
-      mockIdx++;
-      resolve(reply);
-    }, 800);
+async function askButler(message, mode) {
+  const resp = await fetch('/api/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Token': localStorage.getItem(TOKEN_KEY) || ''
+    },
+    body: JSON.stringify({ message, mode, history: history.slice(-20) })
   });
+  if (resp.status === 401 || resp.status === 403) {
+    localStorage.removeItem(TOKEN_KEY);
+    throw new Error('口令被驳回了。刷新页面，重新报口令。');
+  }
+  if (!resp.ok) {
+    throw new Error('管家暂时离线（服务错误 ' + resp.status + '）。这句话没有入档。');
+  }
+  const data = await resp.json();
+  return data.reply;
 }
 
 /* ============ 发送流程 ============ */
@@ -507,13 +509,21 @@ async function send() {
   sendBtn.disabled = true;
 
   addBubble('master', text);
+  history.push({ role: 'user', content: text });
   input.value = '';
   autoGrow();
 
   const typingRow = addTyping();
-  const reply = await askButler(text, currentMode);
-  typingRow.remove();
-  addBubble('butler', reply);
+  try {
+    const reply = await askButler(text, currentMode);
+    typingRow.remove();
+    addBubble('butler', reply);
+    history.push({ role: 'assistant', content: reply });
+  } catch (err) {
+    history.pop(); // 这条没入档，重发时不重复计
+    typingRow.remove();
+    addBubble('butler', err.message);
+  }
 
   sending = false;
   sendBtn.disabled = false;
