@@ -11,7 +11,7 @@
 环境变量（写在 /var/www/guanjia/secrets.env，systemd EnvironmentFile 注入）：
   BUTLER_TOKEN      聊天口令（前端 X-Token 必须等于它）
   DEEPSEEK_API_KEY  DeepSeek API Key
-  BUTLER_MODEL      可选，默认 deepseek-chat（换 Kimi/通义时改这里和 BUTLER_API_URL）
+  BUTLER_MODEL      可选，默认 deepseek-v4-pro（可降配 deepseek-v4-flash；换 Kimi/通义时改这里和 BUTLER_API_URL）
   BUTLER_API_URL    可选，默认 https://api.deepseek.com/chat/completions
   GUANJIA_DIR       可选，默认 /var/www/guanjia
 
@@ -33,7 +33,7 @@ from flask import Flask, jsonify, request
 BASE = pathlib.Path(os.environ.get("GUANJIA_DIR", "/var/www/guanjia"))
 TOKEN = os.environ.get("BUTLER_TOKEN", "")
 API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
-MODEL = os.environ.get("BUTLER_MODEL", "deepseek-chat")
+MODEL = os.environ.get("BUTLER_MODEL", "deepseek-v4-pro")
 API_URL = os.environ.get("BUTLER_API_URL", "https://api.deepseek.com/chat/completions")
 
 MAX_HISTORY = 20          # 前端最多带 20 条历史
