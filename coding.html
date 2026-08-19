@@ -210,6 +210,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+.icp-footer{position:fixed;bottom:6px;left:0;right:0;text-align:center;font-size:12px;z-index:20;pointer-events:none;}.icp-footer a{color:rgba(0,0,0,.35);text-decoration:none;pointer-events:auto;}.icp-footer a:hover{color:rgba(0,0,0,.6);}
 </style>
 </head>
 <body>
@@ -350,5 +351,6 @@ fetch('data/coding.json').then(r => r.json()).then(data => {
   $('statusLevel').textContent = '数据载入失败';
 });
 </script>
+<footer class="icp-footer"><a href="https://beian.miit.gov.cn" target="_blank" rel="noopener">桂ICP备2026018312号</a></footer>
 </body>
 </html>
